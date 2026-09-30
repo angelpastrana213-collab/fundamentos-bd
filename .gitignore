@@ -1,0 +1,7 @@
+Lib/
+Scripts/
+Guiones/
+pyvenv.cfg
+__pycache__/
+*.pyc
+.env
