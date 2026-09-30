@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Producto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="form-container">
+        <a href="/productos" class="btn-back">&larr; Volver a Productos</a>
+
+        <h2>Actualizar Producto</h2>
+
+        <form action="/actualizar_producto/{{ producto.idProducto }}" method="POST">
+            <!-- Nombre deshabilitado (solo lectura) -->
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto</label>
+                <input type="text" id="nombre" value="{{ producto.nombre_producto }}" disabled style="background-color: #e2e8f0; cursor: not-allowed;">
+            </div>
+
+            <!-- Categoría deshabilitada (solo lectura) -->
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria" value="{{ producto.categoria }}" disabled style="background-color: #e2e8f0; cursor: not-allowed;">
+            </div>
+
+            <!-- Campos MODIFICABLES -->
+            <div class="form-group">
+                <label for="precio">Precio ($)</label>
+                <input type="number" step="0.01" id="precio" name="precio" value="{{ producto.precio }}" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock</label>
+                <input type="number" id="stock" name="stock" value="{{ producto.stock }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-submit">Guardar Cambios</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Nuevo Pedido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <a href="/pedidos" class="back-link">← Regresar a Pedidos</a>
+        <h2>Registrar Nuevo Pedido</h2>
+
+        <form action="/agregar_pedido" method="POST">
+            <div class="form-group">
+                <label for="id_cliente">Cliente:</label>
+                <select name="id_cliente" id="id_cliente" required>
+                    <option value="" disabled selected>Selecciona un cliente...</option>
+                    {% for cliente in clientes %}
+                        <!-- El 'value' DEBE ser el idCliente numérico -->
+                        <option value="{{ cliente.idCliente }}">{{ cliente.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" name="fecha" id="fecha" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado del Pedido:</label>
+                <select name="estado" id="estado" required>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Completado">Completado</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Guardar Pedido</button>
+        </form>
+    </div>
+
+</body>
+</html>

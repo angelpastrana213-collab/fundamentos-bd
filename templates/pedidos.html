@@ -2,36 +2,75 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pedidos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
     <div class="container">
-        <h2>Listado de Pedidos</h2>
+        <a href="/" class="btn-back">&larr; Regresar al Menú</a>
+
+        <h2>Gestión de Pedidos</h2>
+
         <table>
             <thead>
                 <tr>
-                    <th>ID pedido</th>
-                    <th>Cliente</th>
+                    <th style="width: 50px; text-align: center;">Sel.</th>
+                    <th>ID Pedido</th>
+                    <th>Cliente / Mesa</th>
                     <th>Fecha</th>
                     <th>Estado</th>
-                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                {% for ped in pedidos %}
+                {% for pedido in pedidos %}
                 <tr>
-                    <td>{{ ped.id_pedido }}</td>
-                    <td>{{ ped.cliente }}</td>
-                    <td>{{ ped.fecha }}</td>
-                    <td>{{ ped.estado }}</td>
-                    <td>${{ "%.2f"|format(ped.total) }}</td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="pedido_seleccionado" value="{{ pedido.idPedido }}" onclick="actualizarEnlaces('{{ pedido.idPedido }}')">
+                    </td>
+                    <td><strong>{{ pedido.idPedido }}</strong></td>
+                    <td>{{ pedido.cliente }}</td>
+                    <td>{{ pedido.fecha }}</td>
+                    <td><span class="badge badge-{{ pedido.estado|lower }}">{{ pedido.estado }}</span></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #64748b;">No hay pedidos registrados.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <br>
-        <a href="/" class="btn-secondary">Volver al Inicio</a>
+
+        <div class="actions-footer">
+            <a href="/agregar_pedido" class="btn">+ Agregar Pedido</a>
+            <a id="btn-actualizar" href="#" class="btn btn-secondary" onclick="validarSeleccion(event)">Actualizar Pedido</a>
+            <a id="btn-borrar" href="#" class="btn btn-danger" onclick="validarSeleccion(event)">Borrar Pedido</a>
+        </div>
     </div>
+
+    <script>
+    let idSeleccionado = null;
+
+    function actualizarEnlaces(id) {
+        idSeleccionado = id;
+        document.getElementById('btn-actualizar').href = '/actualizar_pedido/' + id;
+        document.getElementById('btn-borrar').href = '/borrar_pedido/' + id;
+    }
+
+    function validarSeleccion(event) {
+        if (!idSeleccionado) {
+            event.preventDefault();
+            alert('Por favor, selecciona un pedido de la tabla primero.');
+            return false;
+        }
+        
+        if (event.currentTarget.id === 'btn-borrar') {
+            if (!confirm('¿Estás seguro de eliminar este pedido?')) {
+                event.preventDefault();
+            }
+        }
+    }
+    </script>
 </body>
 </html>

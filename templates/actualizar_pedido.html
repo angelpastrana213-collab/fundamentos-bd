@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Pedido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+   <div class="page-container">
+    <!-- AGREGA ESTA LÍNEA AQUÍ -->
+    <a href="/" class="back-link">← Regresar al Menú</a>
+
+    <h2>Gestión de Productos</h2>
+    ...
+
+        <form action="/actualizar_pedido/{{ pedido.idPedido }}" method="POST">
+            <div class="form-group">
+                <label for="id_cliente">Cliente:</label>
+                <select name="id_cliente" id="id_cliente" required>
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.idCliente }}" {% if cliente.idCliente == pedido.idCliente %}selected{% endif %}>
+                            {{ cliente.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha del Pedido:</label>
+                <input type="date" name="fecha" id="fecha" value="{{ pedido.fecha_pedido }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado del Pedido:</label>
+                <select name="estado" id="estado" required>
+                    <option value="Pendiente" {% if pedido.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                    <option value="Completado" {% if pedido.estado == 'Completado' %}selected{% endif %}>Completado</option>
+                    <option value="Cancelado" {% if pedido.estado == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Guardar Cambios</button>
+        </form>
+    </div>
+
+</body>
+</html>

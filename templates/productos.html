@@ -2,36 +2,83 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Productos - Cafetería</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <!-- Enlace al archivo CSS en Flask -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
     <div class="container">
-        <h2>Catálogo de Productos</h2>
+        <!-- Botón de regresar al menú principal -->
+        <a href="/" class="btn-back">&larr; Regresar</a>
+
+        <h2>Gestión de Productos</h2>
+
         <table>
             <thead>
                 <tr>
+                    <th style="width: 50px; text-align: center;">Sel.</th>
                     <th>ID</th>
-                    <th>Producto</th>
+                    <th>Nombre</th>
                     <th>Categoría</th>
                     <th>Precio</th>
                     <th>Stock</th>
                 </tr>
             </thead>
             <tbody>
-                {% for prod in productos %}
-                <tr>
-                    <td>{{ prod.ID }}</td>
-                    <td>{{ prod.Producto }}</td>
-                    <td>{{ prod.Categoría }}</td>
-                    <td>${{ "%.2f"|format(prod.Precio) }}</td>
-                    <td>{{ prod.Stock }}</td>
-                </tr>
-                {% endfor %}
+              {% for producto in productos %}
+<tr>
+    <td style="text-align: center;">
+        <input type="radio" name="producto_seleccionado" value="{{ producto.idProducto }}" onclick="actualizarEnlaces('{{ producto.idProducto }}')">
+    </td>
+    <td>{{ producto.idProducto }}</td>
+    
+    <!-- CAMBIADO: AHORA USA nombre_producto -->
+    <td>{{ producto.nombre_producto }}</td>
+    
+    <td>{{ producto.categoria }}</td>
+    <td>${{ producto.precio }}</td>
+    <td>{{ producto.stock }}</td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="6" style="text-align: center;">No hay productos registrados.</td>
+</tr>
+{% endfor %}
             </tbody>
         </table>
-        <br>
-        <a href="/" class="btn-secondary">Volver al Inicio</a>
+
+        <!-- Botones globales de acción -->
+        <div class="actions-footer">
+            <a href="/agregar_producto" class="btn">Agregar Producto</a>
+            <a id="btn-actualizar" href="#" class="btn btn-secondary" onclick="validarSeleccion(event)">Actualizar Producto</a>
+            <a id="btn-borrar" href="#" class="btn btn-danger" onclick="validarSeleccion(event)">Borrar Producto</a>
+        </div>
     </div>
+
+    <script>
+    let idSeleccionado = null;
+
+    function actualizarEnlaces(id) {
+        idSeleccionado = id;
+        document.getElementById('btn-actualizar').href = '/actualizar_producto/' + id;
+        document.getElementById('btn-borrar').href = '/borrar_producto/' + id;
+    }
+
+    function validarSeleccion(event) {
+        if (!idSeleccionado) {
+            event.preventDefault();
+            alert('Por favor, selecciona un producto de la tabla primero.');
+            return false;
+        }
+        
+        if (event.currentTarget.id === 'btn-borrar') {
+            if (!confirm('¿Estás seguro de eliminar este producto?')) {
+                event.preventDefault();
+            }
+        }
+    }
+    </script>
 </body>
 </html>
